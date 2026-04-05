@@ -1,5 +1,5 @@
 // ========================= CONFIG =========================
-const API_KEY = "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"; 
+const API_KEY = " "; 
 const OPENROUTER_MODEL = "gpt-4o-mini";
 
 // Health tips database
