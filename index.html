@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AI Health Assistant Pro</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+	<div class="container">
+
+		<div class="header-top">
+			<div class="header-left">
+				<h1>🏥 AI Health Assistant Pro</h1>
+				<p class="tagline">Your 24/7 Personal Health Companion</p>
+			</div>
+			<div class="header-right">
+				<button id="profileBtn" class="icon-btn" title="User Profile">👤</button>
+				<button id="themeToggle" aria-pressed="false" onclick="toggleTheme()" class="icon-btn"
+					title="Toggle Theme">🌙</button>
+			</div>
+		</div>
+
+		<div class="topControls">
+			<div class="leftControls">
+				<button id="newChatBtn" onclick="newChat()" class="btn-primary">✨ New Chat</button>
+				<button id="exportBtn" onclick="exportChat()" class="btn-secondary" title="Export chat">📥</button>
+				<button id="clearChatBtn" onclick="clearChat()" class="btn-secondary" title="Clear chat">🗑️</button>
+			</div>
+		</div>
+
+		<!-- Tabs -->
+		<div class="tabs">
+			<button class="tab active" onclick="openTab('chatTab')">💬 Chat</button>
+			<button class="tab" onclick="openTab('symptoms')">🩺 Symptoms</button>
+			<button class="tab" onclick="openTab('bmiTab')">📊 Health Metrics</button>
+			<button class="tab" onclick="openTab('exerciseTab')">💪 Exercise</button>
+			<button class="tab" onclick="openTab('tipsTab')">💡 Health Tips</button>
+			<button class="tab" onclick="openTab('emergencyTab')">🆘 Emergency</button>
+			<button class="tab" onclick="openTab('faqTab')">❓ FAQ</button>
+			<button class="tab" onclick="openTab('profileTab')">👤 Profile</button>
+		</div>
+
+		<!-- CHAT TAB -->
+		<div id="chatTab" class="tabContent active">
+			<div class="chatbox" id="chat"></div>
+			<div class="inputArea">
+				<input type="text" id="userInput" placeholder="Describe your symptoms..." aria-label="Health query">
+				<button id="voiceBtn" class="btn-voice" title="Voice input (Click to speak)"
+					onclick="toggleVoiceInput()">🎤</button>
+				<button onclick="sendMessage()" class="btn-send">Send</button>
+			</div>
+		</div>
+
+		<!-- SYMPTOMS TAB -->
+		<div id="symptoms" class="tabContent">
+			<div class="symptoms-box">
+				<h2>Quick Symptom Check</h2>
+				<p class="subtitle">Select common symptoms:</p>
+				<div class="symptom-grid">
+					<button class="symptom-btn" onclick="quickSymptom('Cold/Cough')">🤧 Cold/Cough</button>
+					<button class="symptom-btn" onclick="quickSymptom('Headache')">🤕 Headache</button>
+					<button class="symptom-btn" onclick="quickSymptom('Fever')">🌡️ Fever</button>
+					<button class="symptom-btn" onclick="quickSymptom('Fatigue')">😴 Fatigue</button>
+					<button class="symptom-btn" onclick="quickSymptom('Sore Throat')">🗣️ Sore Throat</button>
+					<button class="symptom-btn" onclick="quickSymptom('Nausea')">🤢 Nausea</button>
+					<button class="symptom-btn" onclick="quickSymptom('Back Pain')">🔙 Back Pain</button>
+					<button class="symptom-btn" onclick="quickSymptom('Insomnia')">🌙 Insomnia</button>
+				</div>
+				<p class="subtitle" style="margin-top: 20px;">Or describe your custom symptom:</p>
+				<div style="display: flex; gap: 10px;">
+					<input type="text" id="customSymptom" placeholder="Enter symptom..." style="flex:1;">
+					<button onclick="quickSymptom(document.getElementById('customSymptom').value)"
+						class="btn-primary">Check</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- BMI & HEALTH METRICS TAB -->
+		<div id="bmiTab" class="tabContent">
+			<div class="metrics-grid">
+				<div class="metric-card">
+					<h3>BMI Calculator</h3>
+					<div class="heightRow">
+						<input type="number" id="height" placeholder="Height" step="0.1" min="1" max="300"
+							aria-label="Height">
+						<select id="heightUnit" aria-label="Height unit">
+							<option value="in">inches</option>
+							<option value="cm">cm</option>
+							<option value="m">meters</option>
+						</select>
+					</div>
+					<input type="number" id="weight" placeholder="Weight (kg)" min="1" max="500" step="0.1"
+						aria-label="Weight">
+					<button onclick="calculateBMI()" class="btn-primary">Calculate</button>
+					<p id="bmiResult" class="result-box"></p>
+				</div>
+
+				<div class="metric-card">
+					<h3>Water Intake Tracker</h3>
+					<p>Daily Goal: <strong id="waterGoal">8</strong> glasses</p>
+					<div class="water-display" id="waterDisplay"></div>
+					<div class="water-controls">
+						<button onclick="addWater()" class="btn-secondary">➕ Add Glass</button>
+						<button onclick="resetWater()" class="btn-secondary">🔄 Reset</button>
+					</div>
+					<p id="waterStatus" style="text-align: center; margin-top: 10px;"></p>
+				</div>
+
+				<div class="metric-card">
+					<h3>Sleep Tracker</h3>
+					<label>Hours Slept Last Night:</label>
+					<input type="number" id="sleepHours" placeholder="Enter hours" min="0" max="24" step="0.5"
+						style="width: 100%; margin: 8px 0;">
+					<button onclick="logSleep()" class="btn-primary">Save Sleep</button>
+					<p id="sleepInfo" class="result-box"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- EXERCISE TAB -->
+		<div id="exerciseTab" class="tabContent">
+			<div class="exercise-box">
+				<h2>Exercise Tracker</h2>
+				<div class="exercise-form">
+					<label>Exercise Type:</label>
+					<select id="exerciseType"
+						style="width: 100%; margin: 8px 0; padding: 8px; border-radius: 8px; border: none;">
+						<option value="Running">🏃 Running</option>
+						<option value="Walking">🚶 Walking</option>
+						<option value="Cycling">🚴 Cycling</option>
+						<option value="Swimming">🏊 Swimming</option>
+						<option value="Yoga">🧘 Yoga</option>
+						<option value="Gym">🏋️ Gym</option>
+						<option value="Sports">⚽ Sports</option>
+					</select>
+
+					<label>Duration (minutes):</label>
+					<input type="number" id="exerciseDuration" placeholder="Enter minutes" min="1" max="480" step="1"
+						style="width: 100%; margin: 8px 0; padding: 8px; border-radius: 8px; border: none;">
+
+					<label>Intensity:</label>
+					<select id="exerciseIntensity"
+						style="width: 100%; margin: 8px 0; padding: 8px; border-radius: 8px; border: none;">
+						<option value="Low">😊 Low</option>
+						<option value="Medium">😌 Medium</option>
+						<option value="High">💪 High</option>
+					</select>
+
+					<button onclick="logExercise()" class="btn-primary">Log Exercise</button>
+				</div>
+
+				<div style="margin-top: 20px;">
+					<h3>Weekly Activity</h3>
+					<p id="exerciseStats" class="result-box">No exercises logged yet.</p>
+					<div id="exerciseList" style="margin-top: 10px;"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- HEALTH TIPS TAB -->
+		<div id="tipsTab" class="tabContent">
+			<div class="tips-box">
+				<h2>Daily Health Tips & Articles</h2>
+				<div class="tips-container" id="tipsContainer"></div>
+			</div>
+		</div>
+
+		<!-- USER PROFILE TAB -->
+		<div id="profileTab" class="tabContent">
+			<div class="profile-box">
+				<h2>Your Health Profile</h2>
+				<form id="profileForm">
+					<div class="form-group">
+						<label>Full Name:</label>
+						<input type="text" id="userName" placeholder="Your name" style="width: 100%;">
+					</div>
+
+					<div class="form-row">
+						<div class="form-group" style="flex: 1;">
+							<label>Age:</label>
+							<input type="number" id="userAge" placeholder="Age" min="1" max="120" style="width: 100%;">
+						</div>
+						<div class="form-group" style="flex: 1;">
+							<label>Gender:</label>
+							<select id="userGender" style="width: 100%;">
+								<option value="">Select...</option>
+								<option value="Male">Male</option>
+								<option value="Female">Female</option>
+								<option value="Other">Other</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Medical Conditions:</label>
+						<textarea id="userConditions" placeholder="e.g., Diabetes, Asthma"
+							style="width: 100%;"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label>Current Medications:</label>
+						<textarea id="userMedications" placeholder="e.g., Aspirin 100mg"
+							style="width: 100%;"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label>Allergies:</label>
+						<textarea id="userAllergies" placeholder="e.g., Penicillin, Peanuts"
+							style="width: 100%;"></textarea>
+					</div>
+
+					<button type="button" onclick="saveProfile()" class="btn-primary">Save Profile</button>
+				</form>
+
+				<div id="profileSummary"
+					style="margin-top: 20px; padding: 15px; background: rgba(6,182,212,0.1); border-radius: 8px; display: none;">
+					<h3>Your Profile Summary</h3>
+					<p id="profileDisplay"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- EMERGENCY CONTACTS TAB -->
+		<div id="emergencyTab" class="tabContent">
+			<div class="emergency-box">
+				<h2>🆘 Emergency Contacts</h2>
+				<p class="subtitle">Save important contacts for quick access during emergencies</p>
+
+				<div class="emergency-form">
+					<h3>Add Emergency Contact</h3>
+					<div class="form-row">
+						<div class="form-group" style="flex: 1;">
+							<label>Contact Name:</label>
+							<input type="text" id="contactName" placeholder="e.g., Mom, Doctor Smith"
+								style="width: 100%;">
+						</div>
+						<div class="form-group" style="flex: 1;">
+							<label>Relationship:</label>
+							<input type="text" id="contactRelation" placeholder="e.g., Mother, Doctor"
+								style="width: 100%;">
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group" style="flex: 1;">
+							<label>Phone Number:</label>
+							<input type="tel" id="contactPhone" placeholder="e.g., +1-234-567-8900"
+								style="width: 100%;">
+						</div>
+						<div class="form-group" style="flex: 1;">
+							<label>Address (Optional):</label>
+							<input type="text" id="contactAddress" placeholder="Address" style="width: 100%;">
+						</div>
+					</div>
+
+					<button onclick="addEmergencyContact()" class="btn-primary">➕ Add Contact</button>
+				</div>
+
+				<div style="margin-top: 20px;">
+					<h3>Your Emergency Contacts</h3>
+					<div id="emergencyContactsList"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ TAB -->
+		<div id="faqTab" class="tabContent">
+			<div class="faq-box">
+				<h2>❓ Frequently Asked Questions</h2>
+				<div id="faqList" class="faq-list"></div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- FOOTER / LICENSE -->
+	<footer class="footer">
+		<p>© 2026 AI Health Assistant Pro. All rights reserved. | Developed with ❤️ | Supratik Saha.</p>
+	</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+
+</html>
