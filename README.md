@@ -160,6 +160,8 @@ All user data is stored locally using browser's `localStorage`:
 - **No Server Backend:** This is a pure client-side application
 - **Session Data:** Clear browser cache to remove all data
 
+Video explanation : https://youtu.be/8-BK8HxVvlE?si=e7cpPAFMgb9lUSV-
+
 ## ⚠️ Disclaimer
 
 **This application is for educational and informational purposes only.**
